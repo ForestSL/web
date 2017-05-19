@@ -9,8 +9,7 @@
     <meta name="author" content="">
 
 
-    <title>任务</title>
-	
+    <title>公告</title>
 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
 	<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
@@ -20,22 +19,21 @@
 
 	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+	
+	
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-
-    <!-- Custom styles for this template -->
-    <link href="../css/task.css" rel="stylesheet">
 	
-	<style type="text/css">  
-		div p{margin0 auto;width200px;}
-	</style>
+	
+    <!-- Custom styles for this template -->
+    <link href="../css/announcement.css" rel="stylesheet">
+
 
   </head>
 
   <body>
-
+    <!-- 导航栏 -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -49,58 +47,50 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="homepage.html">组织管理</a></li>
-            <li><a href="announcement.html">公告管理</a></li>
-            <li class="active"><a href="#">任务管理</a></li>
+            <li ><a href="homepage.html">组织管理</a></li>
+            <li class="active"><a href="#">公告管理</a></li>
+            <li><a href="task.html">任务管理</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    	<div class="container">  
-    <h1>XX公司任务列表</h1>  
+	<div class="container">  
+    <h1>XX公司近日公告</h1>  
+		<nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="announcement.html">Back</a></li>
+                </ul>
+              </nav>
     <p><button id="refresh" class="btn btn-default">刷新</button></p>  
     <table id="table" class="table table-hover" data-classes="table table-hover"  
            data-striped="true"  >  
         
     </table>  
+
 	</div>  
-	
-	<p>因研究activiti工作流需要时间，先用原始方法仿照实现相应功能</p>
-	<p>任务类型：1->请假 2->工作</p>
-	<p>所在部门：目前展示的是部门ID，之后改为部门名称</p>
-	<p>任务状态：1->待处理 2->同意 3->驳回</p>
 	
 	<script>
 	  
 	  $('button#refresh').click(function () {  
              $.ajax({
                     type: "GET",
-                    url: 'http://115.159.38.100:3000/task',
+                    url: 'http://115.159.38.100:3000/bulletin',
                     
                     success: function (datas, textStatus){
                         $('#table').bootstrapTable({
 						columns: [{
-							field: 'taskID',
-							title: '任务类型'
+							field: 'departName',
+							title: '部门名称'
 							}, {
-							field: 'authorID',
-							title: '任务发布者'
-							}, {
-							field: 'authorDepart',
-							title: '所在部门'
-							}, {
-							field: 'taskBegin',
-							title: '开始时间'
-							}, {
-							field: 'taskEnd',
-							title: '结束时间'
+							field: 'name',
+							title: '公告名称'
 							}, {
 							field: 'content',
 							title: '内容'
 							}, {
-							field: 'taskState',
-							title: '当前状态'
+							field: 'time',
+							title: '时间'
 						}],
 						data: datas
 						});
@@ -116,7 +106,8 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+   
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-
+ 
   </body>
 </html>
