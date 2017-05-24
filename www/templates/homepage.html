@@ -20,29 +20,13 @@
   	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <script src="../js/tree.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 
-    <script type="text/javascript">
-    <!--
-    var Tree = new Array;
-    // nodeId | parentNodeId | nodeName | nodeUrl
-    Tree[0]  = "1|0|Page 1|#";
-    Tree[1]  = "2|1|Page 1.1|#";
-    Tree[2]  = "3|1|Page 1.2|#";
-    Tree[3]  = "4|3|Page 1.2.1|#";
-    Tree[4]  = "5|1|Page 1.3|#";
-    Tree[5]  = "6|2|Page 1.1.1|#";
-    Tree[6]  = "7|6|Page 1.1.1.1|#";
-    Tree[7]  = "8|6|Page 1.1.1.2|#";
-    Tree[8]  = "9|1|Page 1.4|#";
-    Tree[9]  = "10|9|Page 1.4.1|#";
-    Tree[10] = "11|0|Page 2|#";
-    //-->
-    </script>
 
     <!-- Custom styles for this template -->
     <link href="../css/homepage.css" rel="stylesheet">
     <link href="../css/tree.css" rel="stylesheet">
+    
 
   </head>
 
@@ -68,80 +52,82 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+    
+    <div class="tree well">
+    <ul>
+      <li>
+       <span><i class="glyphicon glyphicon-folder-open"></i> Parent</span> <a href="">Goes somewhere</a>
+       <ul>
+        <li>
+          <span><i class="glyphicon glyphicon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+         <ul>
+          <li>
+            <span><i class="glyphicon glyphicon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+         </ul>
+        </li>
+        <li>
+          <span><i class="glyphicon glyphicon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+         <ul>
+          <li>
+            <span><i class="glyphicon glyphicon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+          <li>
+            <span><i class="glyphicon glyphicon-minus-sign"></i> Grand Child</span> <a href="">Goes somewhere</a>
+           <ul>
+            <li>
+              <span><i class="glyphicon glyphicon-minus-sign"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+               <ul>
+                <li>
+                  <span><i class="glyphicon glyphicon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+                </li>
+                <li>
+                  <span><i class="glyphicon glyphicon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+                </li>
+                </ul>
+            </li>
+            <li>
+              <span><i class="glyphicon glyphicon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+            <li>
+              <span><i class="glyphicon glyphicon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+           </ul>
+          </li>
+          <li>
+            <span><i class="glyphicon glyphicon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <span><i class="glyphicon glyphicon-folder-open"></i> Parent2</span> <a href="">Goes somewhere</a>
+       <ul>
+        <li>
+          <span><i class="glyphicon glyphicon-leaf"></i> Child</span> <a href="">Goes somewhere</a>
+          </li>
+         </ul>
+      </li>
+     </ul>
+     </div>
 
-    <div class="container">
-      <div class="list-group">
-          <a href="departmentPage.html" class="list-group-item active">
-              <h4 class="list-group-item-heading" >
-                  董事会
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  理事会
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  监事会
-              </h4>
-          </a>
-      </div>
-
-      <div class="list-group">
-          <a href="#" class="list-group-item active">
-              <h4 class="list-group-item-heading">
-                  秘书部
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  秘书部1
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  秘书部1
-              </h4>
-          </a>
-      </div>
-
-      <div class="list-group">
-          <a href="#" class="list-group-item active">
-              <h4 class="list-group-item-heading">
-                  技术部
-              </h4>
-          </a>
-      </div>
-
-      <div class="list-group">
-          <a href="#" class="list-group-item active">
-              <h4 class="list-group-item-heading">
-                  人事部
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  子部门1
-              </h4>
-          </a>
-          <a href="#" class="list-group-item">
-              <h4 class="list-group-item-heading">
-                  子部门2
-              </h4>
-          </a>
-      </div>
-
-      <div class="list-group">
-          <a href="#" class="list-group-item active">
-              <h4 class="list-group-item-heading">
-                  财务部
-              </h4>
-          </a>
-      </div>
-
-
-    </div><!-- /.container -->
+  <script>
+    $(function () {
+      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+      $('.tree li.parent_li > span').on('click', function (e) {
+          var children = $(this).parent('li.parent_li').find(' > ul > li');
+          if (children.is(":visible")) {
+              children.hide('fast');
+              $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+          } else {
+              children.show('fast');
+              $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+          }
+          e.stopPropagation();
+      });
+    });
+  </script>
 
 
     
