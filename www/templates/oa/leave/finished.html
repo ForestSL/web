@@ -60,24 +60,42 @@
     	<div class="container">  
     <h1>XX公司任务流程</h1>  
 
+  <table width="100%" class="need-border">
+    <thead>
+      <tr>
+        <th>假种</th>
+        <th>申请人</th>
+        <th>申请时间</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th><b>实际</b>开<br/>始时间</th>
+        <th><b>实际</b>结<br/>束时间</th>
+        <th>流程启动时间</th>
+        <th>流程结束时间</th>
+        <th>流程结束原因</th>
+        <th>流程版本</th>
+      </tr>
+    </thead>
+    <tbody>
+      <c:forEach items="${page.result }" var="leave">
+        <c:set var="hpi" value="${leave.historicProcessInstance }" />
+        <tr id="${leave.id }" tid="${task.id }">
+          <td>事假</td>
+          <td>zzk</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>2017.5.25</td>
+          <td>已处理</td>
+          <td><b title='流程版本号'>V1</b></td>
+        </tr>
+      </c:forEach>
+    </tbody>
+  </table>
 
-<ul id="css3menu">
-  <li>
-    <a rel="#">请假（普通表单）</a>
-    <ul>
-      <li><a href="oa/leave/running.html">运行中流程(普通)</a></li>
-      <li><a href="oa/leave/finished.html">已结束流程(普通)</a></li>
-    </ul>
-  </li>
-  <li>
-    <a rel='#'>流程管理</a>
-    <ul>
-      <li><a href='workflow/process-list'>流程定义及部署管理</a></li>
-      <li><a href='workflow/processinstance/running'>运行中流程</a></li>
-      <li><a href='workflow/model/list'>模型工作区</a></li>
-    </ul>
-  </li>
-</ul>
 
 	</div>  
 
