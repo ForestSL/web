@@ -12,10 +12,19 @@ function announcementSubmit(name1,content1,dept)
 	
 	anouncement.name=name1;
 	anouncement.content=content1;
-	anouncement.department=dept;
+	anouncement.departName=dept;
+	anouncement.time = "";
 
-	var d = new Date();
-	anouncement.time=d.toUTCString();
+	//alert("asfa");
+	var date = new Date();
+	var year = date.getFullYear();
+	var month = date.getMonth()+1;
+	var day = date.getDate();
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+	anouncement.time+=year+"."+month+"."+day+"\t"+hour+":"+minute+":"+second;
+	//alert(anouncement.time);
 
 	//alert(anouncement.name+"\n"+anouncement.content+"\n"+anouncement.dept+"\n"+anouncement.time);
 

@@ -52,10 +52,28 @@
             <div class="form-group">
               <label for="name">对象</label>
               <select class="form-control" id="deptSelect">
-                  <option>全体</option>
-                  <option>部门1</option>
-                  <option>部门2</option>
               </select>
+
+          <script>//部门下拉菜单
+          //alert("111");  
+            $.ajax({    
+              type : 'GET',    
+              url: 'http://115.159.38.100:3000/depart',  
+              dataType : "json",    
+              success : function(data) {  
+             // alert("2222");  
+                var dept_list = data;  
+                var opts = "";  
+                for( var dept_index = 0 ; dept_index < dept_list.length; dept_index++ ){  
+                var dept = dept_list[dept_index].departName;  
+                opts += "<option >"+dept+"</option>";  
+                }
+              $("#deptSelect").append(opts);
+              $("#deptSelect").selectpicker('refresh');
+               }//==sucess function       
+            }); //====ajax  */
+
+          </script> 
 
               <label for="name">公告名称</label>
               <input type="text" class="form-control" id="name" placeholder="请输入名称">
@@ -65,14 +83,13 @@
               <textarea class="form-control" id="content" rows="6" placeholder="请输入公告内容"></textarea>
             </div>
             <div class="checkbox">
-              <label>
-                <input type="checkbox"> 置顶（未实现）
-              </label>
+              
             </div>
             <button type="submit" class="btn btn-default" id="submit" >提交发布</button>
             <script>
               $("button#submit").click(function(){
                 var dp = deptSelect.value;
+                //alert(dp);
                 var nm = document.getElementById("name").value;
                 var ct = document.getElementById("content").value;
                 
@@ -85,17 +102,18 @@
                     async : true,
                     success: function (data, textStatus){
                         if(data == "success"){
-                        //alert("返回sucess成功");
+                        alert("发布成功");
+                
+                        window.location.href='announcement.html';
                         } else {
-                        //alert("返回成功");
+                        alert("发布失败，请重试。");
                         }
                     }
                     
                   });
 
-                alert("发布成功");
                 
-                window.location.href='announcement.html';
+                window.event.returnValue=false; 
               })
             </script>
           </form>
