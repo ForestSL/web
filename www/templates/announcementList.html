@@ -63,7 +63,7 @@
 	<div class="content">
     <div class="table-responsive"> 
         <div id="toolbar">
-        <a href="javascript:void(0);" class="btn btn-danger btn-xs" id = "del"><i class="icon iconfont"></i>删除</a>
+        <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="announceDel()"><i class="icon iconfont"></i>删除</a>
         </div>
         <table id="taskList_table" class="table-striped table-hover" data-mobile-responsive="true"></table>
     </div>
@@ -71,111 +71,133 @@
 
 	<script>
     $(document).ready(function(){ 
-      $.ajax({
+      //var data0;
+      /*$.ajax({
             type: "GET",
             url: 'http://115.159.38.100:3000/bulletin',
                     
-            success: function (datas, textStatus){
-              $('#table').bootstrapTable({
-                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                pagination: true,                   //是否显示分页（*）
-                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
-                pageNumber: 1,                       //初始化加载第一页，默认第一页
-                pageSize: 10,                       //每页的记录行数（*）
-                pageList: [10, 25, 50],             //可供选择的每页的行数（*）
-                paginationPreText: "上一页",
-                paginationNextText: "下一页",
+            success: function (datas, textStatus){ 
+              data0=datas;
+              alert("ssss");
+            }//==sucess function       
+        }); //====ajax  */
 
-                toolbar: '#toolbar',                //工具按钮用哪个容器
-                //sortable: true,                     //是否启用排序
-                //sortOrder: "asc",                   //排序方式
-                //queryParams: oTableInit.queryParams,//传递参数（*）
+      //bootstrapTable 表格数据初始化 
+      var table = $('#table').bootstrapTable({
+          url: 'http://115.159.38.100:3000/bulletin',
+          method:  "GET",
+          cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+          pagination: true,                   //是否显示分页（*）
+          sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+          pageNumber: 1,                       //初始化加载第一页，默认第一页
+          pageSize: 10,                       //每页的记录行数（*）
+          pageList: [10, 25, 50],             //可供选择的每页的行数（*）
+          paginationPreText: "上一页",
+          paginationNextText: "下一页",
 
-                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
-                strictSearch: false,// 是否严格搜索
-                searchOnEnterKey: false, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+          toolbar: '#toolbar',                //工具按钮用哪个容器
+          sortable: true,                     //是否启用排序
+          sortOrder: "asc",                   //排序方式
+          //queryParams: oTableInit.queryParams,//传递参数（*）
 
-                clickToSelect: true,
-                striped: true,                              //是否显示行间隔色
-                showColumns: true, //是否显示所有的列
-                minimumCountColumns: 2, //最少允许的列数
-                showRefresh: true, //是否显示刷新按钮
-                showToggle:true, //是否显示详细视图和列表视图的切换按钮
+         
 
-                //showExport: true,                     //是否显示导出
-                //exportDataType: "basic",              //basic', 'all', 'selected'.
+          search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+          strictSearch: false,// 是否严格搜索
+          searchOnEnterKey: false, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
 
+          clickToSelect: true,
+          striped: true,                              //是否显示行间隔色
+          showColumns: true, //是否显示所有的列
+          minimumCountColumns: 2, //最少允许的列数
+          showRefresh: true, //是否显示刷新按钮
+          showToggle:true, //是否显示详细视图和列表视图的切换按钮
 
-                columns: [
-                {
-                  checkbox:true
-                },
-                {
-                  field: 'departName',
-                  title: '部门名称'
-                  }, {
-                  field: 'name',
-                  title: '公告名称'
-                  }, {
-                  field: 'content',
-                  title: '内容'
-                  }, {
-                  field: 'time',
-                  title: '时间'
-                }],
-                data: datas
+          //showExport: true,                     //是否显示导出
+          //exportDataType: "basic",              //basic', 'all', 'selected'.
 
 
-                 });//=====bootstrapTable   
+          columns: [
+          {
+            //checkbox:true,
+            radio: true
+          },
+          {
+            field: 'number',
+            title: 'number',
+            visible:true,
+            formatter: function (value, row, index) {
+                 return index+1;
+            }
 
-            }//==sucess function   
-        }); //====ajax  
+            },{
+            field: 'departName',
+            title: '部门名称',
+            align: 'center',
+            width:120
+            //sortable: true
+            }, {
+            field: 'name',
+            title: '公告名称',
+            align: 'center',
+            width:200
+            }, {
+            field: 'content',
+            title: '内容'
+            }, {
+            field: 'time',
+            title: '时间',
+            align: 'center',
+            sortable: true,
+            width:200
+          }],
 
-     
-    }); //==ready function
+          //data: data0
+      });//=====bootstrapTable   
 
-    $("#del").click(function () {  
-      alert("122");
-        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
-        deleteIttem($table, "${ctx}/resource/wfResource!deleteResourceClassType.action", selectIndex, true);
-      });  
-    
-	  function deleteItem($table, requestUrl, selectIndex, reLoad){
-    var selRow = $table.bootstrapTable('getSelections');
-    var idField = $table.bootstrapTable("getOptions").idField;
-    var className = $table.bootstrapTable("getOptions").className;
-    if(className!=null && className.length>0){
-        className +="."
-    }else{
-        className = "";
-    }
-    var datas = className+idField+"="+eval('selRow[0].'+idField)+"&currenttime="+new Date().getTime();
+ /********** bootstrapTable toolbar 按钮事件 *********/  
+      announceDel = function () {  
+       // alert("122");
+        var selectContent = table.bootstrapTable('getSelections')[0]; 
+        
+        if(typeof(selectContent) == 'undefined') {  
+            alert('请选择一个公告!');  
+            return false;  
+        }else{  
+            //alert(selectContent.number);
+            
+            var datas = new Object();
+            datas.time = selectContent.time;
+            //alert(datas.time);
 
-    if(selRow!=null){       
-        qiao.bs.confirm({'title':'提示', 'msg':'此操作不可逆，确认删除第'+selectIndex+'行吗？'}, function(){
             $.ajax({
                type: "POST",
+               url: 'http://115.159.38.100:3000/bulletin/delete',
+               data: datas,
                cache:false,
                async : true,
                dataType : "json",
-               url:  requestUrl,
-               data: datas,
                success: function(data){
-                       alert(data.mess);
-                       if ( data.state == 200 ){
-                           $table.bootstrapTable('hideRow', {index:selectIndex});
-                          if(reLoad){
-                              $table.bootstrapTable('refresh');
-                          }
-                       }
+                  if(data == "success"){    
+
+                    //alert("删除成功！");
+                    table.bootstrapTable('refresh');
+
+                    } else {
+
+                    alert("删除失败");     
+                   // table.bootstrapTable('refresh');                
+                    }
                }
-            });
-        })      
-    }else{
-        alert('请选取要删除的数据行！');
-    }
-}
-	  
+            }); 
+
+        }// =====else
+
+      }//==announceDel
+    
+            
+    }); //==ready function
+
   </script> 
 
 

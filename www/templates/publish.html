@@ -82,6 +82,7 @@
                     type: "POST",
                     url: 'http://115.159.38.100:3000/bulletin',
                     data: data,
+                    async : true,
                     success: function (data, textStatus){
                         if(data == "success"){
                         //alert("返回sucess成功");
