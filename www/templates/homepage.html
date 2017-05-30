@@ -11,6 +11,9 @@
 
     <title>首页</title>
 
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+
      <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -26,7 +29,8 @@
     <!-- Custom styles for this template -->
     <link href="../css/homepage.css" rel="stylesheet">
     <link href="../css/tree.css" rel="stylesheet">
-    
+
+    <script src="../js/homepage.js"></script>
 
   </head>
 
@@ -53,64 +57,54 @@
       </div>
     </nav>
     
+
     <div class="tree well">
-    <ul>
-      <li>
-       <span><i class="glyphicon glyphicon-folder-open"></i> xx企业</span> 
-       <ul>
+      <ul>
         <li>
-          <span><i class="glyphicon glyphicon-minus-sign"></i> 秘书部</span> <a href="">详情</a>
-         <ul>
+         <span><i class="glyphicon glyphicon-minus-sign"></i> xx企业</span> 
+         <ul id ="root">
+         
          </ul>
         </li>
-        <li>
-          <span><i class="glyphicon glyphicon-minus-sign"></i> 董事会</span> <a href="departmentPage.html">详情</a>
-         <ul>
+      </ul>
+    </div>
 
-          <li>
-            <span><i class="glyphicon glyphicon-leaf"></i> 理事会</span> <a href="">详情</a>
-        
-            <li>
-              <span><i class="glyphicon glyphicon-leaf"></i> 监事会</span> <a href="">详情</a>
-            </li>           
-          </li>
-         </ul>
+    <script>//部门树的动态创建
+//-------------------------------创建一级部门节点------------------------------------------
 
-          <li>
-          <span><i class="glyphicon glyphicon-minus-sign"></i> 技术部</span> <a href="">详情</a>
-          </li>
+      $.ajax({
+        type : 'GET',    
+        url: 'http://115.159.38.100:3000/depart/search/first',  
+        dataType : "json",    
 
-           <li>
-          <span><i class="glyphicon glyphicon-minus-sign"></i> 人事部</span> <a href="">详情</a>
-          </li>
+        success : function(data) {  
+        //alert("2222
+          var agr ="ul#root";//agr to append
+          var dept_list = data;  
+          var opts = "";  
 
-           <li>
-          <span><i class="glyphicon glyphicon-minus-sign"></i> 财务部</span> <a href="">详情</a>
-          </li>
+          for( var dept_index = 0 ; dept_index < dept_list.length; dept_index++ ){  
+            //画本节点
+            var dName = dept_list[dept_index].departName;
+            var dId = dept_list[dept_index].departID;
+            opts += "<li>" + "<span><i class=\"glyphicon glyphicon-leaf\"></i>" + dName + "</span> ";
+            opts += "<a href=\"departmentPage.html\">详情</a>";  
+            opts +="<ul id =\"" + dId  +"\">" +"</ul></li>"; 
+            $(agr).append(opts);
+            opts = "";
+            //画该节点的子节点
+            
+            createChildrenNode(dName,dId);
 
-        </li>
-       </ul>
-      </li>
-
-     </div>
-
-  <script>
-    $(function () {
-      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
-      $('.tree li.parent_li > span').on('click', function (e) {
-          var children = $(this).parent('li.parent_li').find(' > ul > li');
-          if (children.is(":visible")) {
-              children.hide('fast');
-              $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
-          } else {
-              children.show('fast');
-              $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
           }
-          e.stopPropagation();
-      });
-    });
-  </script>
 
+        //var agr1 = "ul#"+dId;
+       // $("#root").append(opts);
+         }//==sucess function       
+      }); //====ajax  */
+
+
+    </script> 
 
     
 </html>
