@@ -15,7 +15,7 @@ $(function () {
 });
 
 //创建当前部门的子部门节点，pName，pId分别为当前部门的名字和id
-function createChildrenNode(pName,pId)
+function createChildrenNode(pName,pID)
 {
   //alert(pName);
   var req = new Object(); //创建Post对象
@@ -31,17 +31,18 @@ function createChildrenNode(pName,pId)
         success : function(data) {  
         //alert("2222);
         if (data != "null"){
-          var agr = "ul#"+pId;//agr to append
+          var agr = "ul#"+pID;//agr to append
           var dept_list = data;  
           var opts = "";  
 
           for( var dept_index = 0 ; dept_index < dept_list.length; dept_index++ ){  
             //画本节点
             var dName = dept_list[dept_index].departName;
-            var dId = dept_list[dept_index].departID;
+            var dID = dept_list[dept_index].departID;
             opts += "<li>" + "<span><i class=\"glyphicon glyphicon-leaf\"></i>" + dName + "</span> ";
-            opts += "<a href=\"departmentPage.html\">详情</a>";  
-            opts +="<ul id =\"" + dId  +"\">" +"</ul></li>"; 
+            //opts += "<a href=\"departmentPage.html\">详情</a>";  
+            opts += "<a href=\"departmentPage.html?agr=" + dID + "\">详情</a>"; 
+            opts +="<ul id =\"" + dID  +"\">" +"</ul></li>"; 
             $(agr).append(opts);
             opts = "";
             //画该节点的子节点
