@@ -57,29 +57,48 @@
       </div>
     </nav>
 
-    	<div class="container">  
-    <h1>XX公司任务流程</h1>  
+    <div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <h1>XX公司任务流程</h1>
+            <p>公司管理人员进行任务流程管理，包括请假、表单、流程部署定义等。</p>
+          </div>
+          <div class="row">
+            <div class="col-xs-6 col-lg-4">
+              <h2>请假</h2>
+              <p>请假流程：公司员工进行请假申请，部长或领导进行办理，管理人员查看当前运行流程和已结束流程。</p>
+              <p><a class="btn btn-default" href="oa/leave/running.html" role="button">运行中流程(普通) &raquo;</a></p>
+              <p><a class="btn btn-default" href="oa/leave/finished.html" role="button">已结束流程(普通) &raquo;</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div class="col-xs-6 col-lg-4">
+              <h2>动态表单</h2>
+              <p>动态表单任务的状态查看。</p>
+              <p><a class="btn btn-default" href="#" role="button">流程列表(动态) &raquo;</a></p>
+              <p><a class="btn btn-default" href="#" role="button">任务列表(动态) &raquo;</a></p>
+              <p><a class="btn btn-default" href="#" role="button">运行中流程表(动态) &raquo;</a></p>
+              <p><a class="btn btn-default" href="#" role="button">已结束流程(动态) &raquo;</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div class="col-xs-6 col-lg-4">
+              <h2>流程管理</h2>
+              <p>管理员查看所有流程，以及进行流程的定义部署。</p>
+              <p><a class="btn btn-default" href="#" role="button">流程定义及部署管理 &raquo;</a></p>
+              <p><a class="btn btn-default" href="#" role="button">运行中流程 &raquo;</a></p>
+              <p><a class="btn btn-default" href="#" role="button">模型工作区 &raquo;</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+          </div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->
+      </div><!--/row-->
+
+      <hr>
 
 
-<ul id="css3menu">
-  <li>
-    <a rel="#">请假（普通表单）</a>
-    <ul>
-      <li><a href="oa/leave/running.html">运行中流程(普通)</a></li>
-      <li><a href="oa/leave/finished.html">已结束流程(普通)</a></li>
-    </ul>
-  </li>
-  <li>
-    <a rel='#'>流程管理</a>
-    <ul>
-      <li><a href='workflow/process-list'>流程定义及部署管理</a></li>
-      <li><a href='workflow/processinstance/running'>运行中流程</a></li>
-      <li><a href='workflow/model/list'>模型工作区</a></li>
-    </ul>
-  </li>
-</ul>
-
-	</div>  
+    </div><!--/.container-->
 
 
     <!-- Bootstrap core JavaScript
