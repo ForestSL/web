@@ -14,6 +14,11 @@
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 
+     <!-- bootstrapTable--> 
+    <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table-zh-CN.js"></script>
+
      <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -26,12 +31,27 @@
     <!-- Custom styles for this template -->
     <link href="../css/homepage.css" rel="stylesheet">
     <link href="../css/tree.css" rel="stylesheet">
+    <link href="../css/departmentPage.css" rel="stylesheet">
+   
+    <script type="text/javascript">
+
+       function GetQueryString(name) {
+         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+         var r = window.location.search.substr(1).match(reg);
+         if (r!=null) return (r[2]); return null;
+      }
+      var dept = new Object();
+      dept.departID = GetQueryString("agr");
+     // alert(dept.departID);
+    //alert(GetQueryString("agr"));
+
+      </script>
 
   </head>
 
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -40,65 +60,211 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="homepage.html">返回上级</a>
+          <a class="navbar-brand" href="#">企业后台管理系统</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="homepage.html">组织管理</a></li>
+            <li class="ac
+            tive"><a href="announcement.html">公告管理</a></li>
+            <li><a href="task.html">任务管理</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
     </nav>
 
+      
+
     <div class="container">
 
-  <h1>董事会 </h1>
+    <div class="pull-right">
 
-  <h2>简介</h2>
-  <h2><small>
-  董事会是由董事组成的、对内掌管公司事务、对外代表公司的经营决策机构。公司设董事会，由股东会选举。董事会设董事长一人，副董事长一人，董事长、副董事长由董事会选举产生。董事任期三年，任期届满，可连选连任。董事在任期届满前，股东会不得无故解除其职务。
-  </small></h2>
-
-  <h2>领导</h2>
-  <h2><small>
-  徐浩
-  </small></h2>
-
-    <div>
-      <h2>人员</h2>
-      <div class="list-group">
-          <a href="#" class="list-group-item">
-              <h4>
-                  张三
-              </h4>
-          </a>
-
-          <a href="#" class="list-group-item">
-              <h4>
-                  李四
-              </h4>
-          </a>
-
-          <a href="#" class="list-group-item">
-              <h4>
-                  王五
-              </h4>
-          </a>
-
+      <div class="dropdown">
+        <button type="button" class="btn dropdown-toggle " id="dropdownMenu1" data-toggle="dropdown">用户管理
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation" class="dropdown-header">全系统用户管理</li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#">添加用户</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#">删除用户</a>
+            </li>
+        </ul>
       </div>
     </div>
 
+   <div class="jumbotron">
+      <strong><h1 id ="deptName"></strong>
+   
+    </div>
+
+    <h2>领导: <small id ="leader">
+    </small></h2>
+    <script>//获取部门领导
+       var datas = new Object();
+       //alert(dept.departID);
+       datas.departID  = dept.departID ;
+
+      $.ajax({
+         type: "POST",
+         url: 'http://115.159.38.100:3000/depart/search',
+         data: datas,
+         cache:false,
+         async : true,
+         dataType : "json",
+
+        success : function(data) {  
+          //deptName
+          var agr ="h1#deptName";//agr to append 
+          var opts = "";  
+
+          var Name = data[0].departName;
+          opts += Name ;
+          $(agr).append(opts);
+
+          //deptLeader
+          agr ="small#leader";//agr to append 
+          opts = "";  
+
+          var Name = data[0].leaderName;
+          //alert(data.leaderName);
+          var ID = data.leaderID;
+          //alert(ID);
+          opts += Name ;
+          $(agr).append(opts);
+
+         }//==sucess function       
+      }); //====ajax  */
+    </script>
+
+    <div class="row">
+        <div class="col-xs-3" id="myScrollspy">
+            <ul class="nav nav-tabs nav-stacked" data-spy="affix" data-offset-top="125">
+                <li><a href="#section-1">添加用户</a></li>
+                <li><a href="#section-2">删除用户</a></li>
+
+            </ul>
+        </div>
+
+        <div class="col-xs-9">
+          <h2>人员</h2>
+          <table id="table" class="table table-hover" data-classes="table table-hover"  
+         data-striped="true"  >  
+              
+          </table>  
+
+        </div>  
+
+        <div class="content">
+          <div class="table-responsive"> 
+              <table id="taskList_table" class="table-striped table-hover" data-mobile-responsive="true"></table>
+          </div>
+        </div>
+       <script type="text/javascript">
+             
+           //   $.ajax({
+            //     type: "POST",
+             //    url: 'http://115.159.38.100:3000/user/search/departid',
+              //   data: datas,
+             //    cache:false,
+            //     async : true,
+             //    dataType : "json",
+           //      success: function(data){
+            //        var agr ="div#userList";//agr to append
+             //       var user_list = data;  
+             //       var opts = "";  
+
+          //          for( var i = 0 ; i < user_list.length; i++ ){  
+           //           //画本节点
+           //           var UName = user_list[i].userName;
+            //          var UID = user_list[i].userID;
+             //         opts += " <a href=\"#\" class=\"list-group-item\">" + "<h4>";
+             //         opts += UName + "<h4></a>";
+
+              //      }
+             //       $(agr).append(opts);
+              //   }//====sucess
+             // });//====ajax
+          $(document).ready(function(){ 
+            var datas = new Object();
+            datas.userDepart = dept.departID  ;
+            var user_list;
+           
+            $.ajax({
+                 type: "POST",
+                 url: 'http://115.159.38.100:3000/user/search/departid',
+                 data: datas,
+                 cache:false,
+                 async : false,
+                 dataType : "json",
+                success: function (datas, textStatus){ 
+                  user_list=datas;
+                }//==sucess function       
+              }); //====ajax
+
+            //alert(user_list[0].userName);
+
+           var table = $('#table').bootstrapTable({
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
+                pageSize: 10,                       //每页的记录行数（*）
+                pageList: [10, 25, 50],             //可供选择的每页的行数（*）
+                paginationPreText: "上一页",
+                paginationNextText: "下一页",
+
+                //toolbar: '#toolbar',                //工具按钮用哪个容器
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+                //queryParams: oTableInit.queryParams,//传递参数（*）
+
+               
+
+                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                strictSearch: false,// 是否严格搜索
+                searchOnEnterKey: false, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+
+                //clickToSelect: true,
+                striped: true,                              //是否显示行间隔色
+                showColumns: true, //是否显示所有的列
+                minimumCountColumns: 1, //最少允许的列数
+                //showToggle:true, //是否显示详细视图和列表视图的切换按钮
+
+                //showExport: true,                     //是否显示导出
+                //exportDataType: "basic",              //basic', 'all', 'selected'.
+
+
+                columns: [
+                {
+                  field: 'userID',
+                  title: '工号',
+                  align: 'center',
+                  width:120,
+                  sortable: true
+                  }, {
+                  field: 'userName',
+                  title: '姓名',
+                  align: 'center',
+                  sortable: true,
+                  width:200
+                }],
+
+                data: user_list
+            });//=====bootstrapTable 
+          }); //====ready
+        </script>
+            
+          <hr>
+        </div>
+    </div>
+</div>
+
   </div><!-- /.container -->
  
-  <script type="text/javascript">
-
-   function GetQueryString(name) {
-     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
-     var r = window.location.search.substr(1).match(reg);
-     if (r!=null) return (r[2]); return null;
-  }
-  var dept = new Object();
-  dept.departID = GetQueryString("agr");
-  alert(dept.departID);
-//alert(GetQueryString("agr"));
-
-  </script>
-
+  
 
     
 </html>
