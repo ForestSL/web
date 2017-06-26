@@ -17,7 +17,6 @@
      <!-- bootstrapTable--> 
     <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table-zh-CN.js"></script>
 
      <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -27,6 +26,9 @@
 
   	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- SweetAlert2对话框 -->
+    <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/sweetalert2/dist/sweetalert2.css">
 
     <!-- Custom styles for this template -->
     <link href="../css/homepage.css" rel="stylesheet">
@@ -77,23 +79,7 @@
 
     <div class="container">
 
-    <div class="pull-right">
-
-      <div class="dropdown">
-        <button type="button" class="btn dropdown-toggle " id="dropdownMenu1" data-toggle="dropdown">用户管理
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation" class="dropdown-header">全系统用户管理</li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#">添加用户</a>
-            </li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#">删除用户</a>
-            </li>
-        </ul>
-      </div>
-    </div>
+   
 
    <div class="jumbotron">
       <strong><h1 id ="deptName"></strong>
@@ -140,122 +126,299 @@
     </script>
 
     <div class="row">
-        <div class="col-xs-3" id="myScrollspy">
-            <ul class="nav nav-tabs nav-stacked" data-spy="affix" data-offset-top="125">
-                <li><a href="#section-1">添加用户</a></li>
-                <li><a href="#section-2">删除用户</a></li>
-
-            </ul>
-        </div>
+        <br /><br />
 
         <div class="col-xs-9">
           <h2>人员</h2>
           <table id="table" class="table table-hover" data-classes="table table-hover"  
-         data-striped="true"  >  
-              
+         data-striped="true"  >   
           </table>  
-
-        </div>  
-
-        <div class="content">
           <div class="table-responsive"> 
-              <table id="taskList_table" class="table-striped table-hover" data-mobile-responsive="true"></table>
+           <div id="toolbar">
+          <a href="javascript:void(0);"  class="btn btn-default" onclick="addUser()"><i class="icon iconfont"></i>添加用户</a>
           </div>
-        </div>
-       <script type="text/javascript">
-             
-           //   $.ajax({
-            //     type: "POST",
-             //    url: 'http://115.159.38.100:3000/user/search/departid',
-              //   data: datas,
-             //    cache:false,
-            //     async : true,
-             //    dataType : "json",
-           //      success: function(data){
-            //        var agr ="div#userList";//agr to append
-             //       var user_list = data;  
-             //       var opts = "";  
+          <table id="taskList_table" class="table-striped table-hover" data-mobile-responsive="true"></table>
 
-          //          for( var i = 0 ; i < user_list.length; i++ ){  
-           //           //画本节点
-           //           var UName = user_list[i].userName;
-            //          var UID = user_list[i].userID;
-             //         opts += " <a href=\"#\" class=\"list-group-item\">" + "<h4>";
-             //         opts += UName + "<h4></a>";
+          </div>  
 
-              //      }
-             //       $(agr).append(opts);
-              //   }//====sucess
-             // });//====ajax
-          $(document).ready(function(){ 
-            var datas = new Object();
-            datas.userDepart = dept.departID  ;
-            var user_list;
-           
-            $.ajax({
-                 type: "POST",
-                 url: 'http://115.159.38.100:3000/user/search/departid',
-                 data: datas,
-                 cache:false,
-                 async : false,
-                 dataType : "json",
-                success: function (datas, textStatus){ 
-                  user_list=datas;
-                }//==sucess function       
-              }); //====ajax
+<script type="text/javascript">
 
-            //alert(user_list[0].userName);
+     //   $.ajax({
+      //     type: "POST",
+       //    url: 'http://115.159.38.100:3000/user/search/departid',
+        //   data: datas,
+       //    cache:false,
+      //     async : true,
+       //    dataType : "json",
+     //      success: function(data){
+      //        var agr ="div#userList";//agr to append
+       //       var user_list = data;  
+       //       var opts = "";  
 
-           var table = $('#table').bootstrapTable({
-                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                pagination: true,                   //是否显示分页（*）
-                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
-                pageNumber: 1,                       //初始化加载第一页，默认第一页
-                pageSize: 10,                       //每页的记录行数（*）
-                pageList: [10, 25, 50],             //可供选择的每页的行数（*）
-                paginationPreText: "上一页",
-                paginationNextText: "下一页",
+    //          for( var i = 0 ; i < user_list.length; i++ ){  
+     //           //画本节点
+     //           var UName = user_list[i].userName;
+      //          var UID = user_list[i].userID;
+       //         opts += " <a href=\"#\" class=\"list-group-item\">" + "<h4>";
+       //         opts += UName + "<h4></a>";
 
-                //toolbar: '#toolbar',                //工具按钮用哪个容器
-                sortable: true,                     //是否启用排序
-                sortOrder: "asc",                   //排序方式
-                //queryParams: oTableInit.queryParams,//传递参数（*）
+        //      }
+       //       $(agr).append(opts);
+        //   }//====sucess
+       // });//====ajax
+    $(document).ready(function(){ 
+      var datas = new Object();
+      datas.userDepart = dept.departID  ;
+      var user_list;
+     
+      $.ajax({
+           type: "POST",
+           url: 'http://115.159.38.100:3000/user/search/departid',
+           data: datas,
+           cache:false,
+           async : false,
+           dataType : "json",
+          success: function (datas, textStatus){ 
+            user_list=datas;
+          }//==sucess function       
+        }); //====ajax
 
-               
+      //alert(user_list[0].userName);
 
-                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
-                strictSearch: false,// 是否严格搜索
-                searchOnEnterKey: false, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+     var table = $('#table').bootstrapTable({
+          cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+          pagination: true,                   //是否显示分页（*）
+          sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+          pageNumber: 1,                       //初始化加载第一页，默认第一页
+          pageSize: 10,                       //每页的记录行数（*）
+          pageList: [10, 25, 50],             //可供选择的每页的行数（*）
+          paginationPreText: "上一页",
+          paginationNextText: "下一页",
 
-                //clickToSelect: true,
-                striped: true,                              //是否显示行间隔色
-                showColumns: true, //是否显示所有的列
-                minimumCountColumns: 1, //最少允许的列数
-                //showToggle:true, //是否显示详细视图和列表视图的切换按钮
+          toolbar: '#toolbar',                //工具按钮用哪个容器
+          sortable: true,                     //是否启用排序
+          sortOrder: "asc",                   //排序方式
+          //queryParams: oTableInit.queryParams,//传递参数（*）
 
-                //showExport: true,                     //是否显示导出
-                //exportDataType: "basic",              //basic', 'all', 'selected'.
+         
+
+          search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+          strictSearch: false,// 是否严格搜索
+          searchOnEnterKey: false, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+
+          //clickToSelect: true,
+          striped: true,                              //是否显示行间隔色
+          showColumns: true, //是否显示所有的列
+          minimumCountColumns: 1, //最少允许的列数
+          //showToggle:true, //是否显示详细视图和列表视图的切换按钮
+
+          //showExport: true,                     //是否显示导出
+          //exportDataType: "basic",              //basic', 'all', 'selected'.
 
 
-                columns: [
-                {
-                  field: 'userID',
-                  title: '工号',
-                  align: 'center',
-                  width:120,
-                  sortable: true
-                  }, {
-                  field: 'userName',
-                  title: '姓名',
-                  align: 'center',
-                  sortable: true,
-                  width:200
-                }],
+          columns: [
+            {
+              field: 'userID',
+              title: '工号',
+              align: 'center',
+              width:100,
+              sortable: true
+              }, {
+              field: 'userName',
+              title: '姓名',
+              align: 'center',
+              sortable: true,
+              width:200
+            },{
+              field: 'Item Operate',
+              title: '相关操作',
+              align: 'center',
+              width:80,
+              formatter:function(value,row,index){
+                         var e = ' <i class="glyphicon glyphicon-pencil" onclick="edit(\''+ row.time +'\',\''+ row.departName + '\')"></i> ';
+                         var d = ' <i class="glyphicon glyphicon-trash" onclick="del(\''+ row.time + '\' )"></i> ';
+                          return e+d;
+              }
+            }
+          ],
 
-                data: user_list
-            });//=====bootstrapTable 
-          }); //====ready
-        </script>
+          data: user_list
+      });//=====bootstrapTable 
+
+/********** bootstrapTable 操作列 *********/  
+
+
+     del = function (time) {
+      swal({
+        title: "确定删除用户吗?",
+        text: "此操作将无法恢复！",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false
+        }).then(function () {
+          var datas = new Object();
+            datas.time = time;
+            //alert(datas.time);
+
+            /*$.ajax({
+               type: "POST",
+               url: 'http://115.159.38.100:3000/bulletin/delete',
+               data: datas,
+               cache:false,
+               async : true,
+               dataType : "json",
+               success: function(data){
+                  if(data == "success"){    
+
+                    //alert("删除成功！");
+                    table.bootstrapTable('refresh');
+
+                    } else {
+
+                    alert("删除失败");     
+                   // table.bootstrapTable('refresh');                
+                    }
+               }
+            }); */
+
+          swal(          
+            'Deleted!',
+            '用户已经删除',
+            'success'
+          );
+        }, function (dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+          }
+        })
+
+
+    }//====del
+ 
+   edit = function (time,departName) {
+        swal({
+          title: '修改',
+          showCancelButton: true,
+          html:
+            '<small>请输入新的姓名</small>'+
+            '<input id="swal-input1" class="swal2-input"></input>' ,
+          preConfirm: function () {
+            return new Promise(function (resolve) {
+              resolve([
+                $('#swal-input1').val(),
+                $('#swal-input2').val()
+              ])
+            })
+          },
+          onOpen: function () {
+            $('#swal-input1').focus()
+          }
+        }).then(function (result) {
+          //swal(JSON.stringify(result))
+          swal({
+            title: "确定修改吗?",
+            text: "此操作将无法恢复！",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+            }).then(function () {
+                //var datas = announcementSubmit(result[0],result[1],departName);
+
+                //alert(datas.name);
+                //alert(datas,content);
+                //alert(datas,departName);
+                //alert(datas.time);
+
+              /*  $.ajax({
+                   type: "POST",
+                   url: 'http://115.159.38.100:3000/bulletin/delete',
+                   data: datas,
+                   cache:false,
+                   async : true,
+                   dataType : "json",
+                   success: function(data){
+                      if(data == "success"){    
+
+                        //alert("删除成功！");
+                        table.bootstrapTable('refresh');
+
+                        } else {
+
+                        alert("删除失败");     
+                       // table.bootstrapTable('refresh');                
+                        }
+                   }
+                }); */
+
+              swal(          
+                'Success!',
+                '公告已经修改',
+                'success'
+              );
+
+        }, function (dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+          }
+        })
+
+        }).catch(swal.noop)
+      
+    }//====edit
+
+/********** bootstrapTable toolbar 按钮事件 *********/  
+      addUser = function () {  
+       //alert("122");
+        swal({
+          title: '添加用户',
+          showCancelButton: true,
+          html:
+            '<small>请输入用户工号</small>'+
+            '<input id="swal-input1" class="swal2-input"></input>' +
+            '<small>请输入用户姓名</small>'+
+            '<input id="swal-input2" class="swal2-input"></input>',
+          preConfirm: function () {
+            return new Promise(function (resolve) {
+              resolve([
+                $('#swal-input1').val(),
+                $('#swal-input2').val()
+              ])
+            })
+          },
+          onOpen: function () {
+            $('#swal-input1').focus()
+          }
+        }).then(function (result) {
+          //swal(JSON.stringify(result))
+          
+
+              swal(          
+                'Success!',
+                '用户已经添加',
+                'success'
+              );
+
+        }).catch(swal.noop)
+      
+      }//==addUser
+
+  }); //====ready
+
+</script>
             
           <hr>
         </div>
@@ -263,8 +426,5 @@
 </div>
 
   </div><!-- /.container -->
- 
-  
-
     
 </html>
