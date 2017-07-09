@@ -11,21 +11,19 @@
 
     <title>部门介绍</title>
 
-    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-
-     <!-- bootstrapTable--> 
-    <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-
+ 	 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
      <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" >
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.min.css" >
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js" ></script>
+	<!-- bootstrapTable--> 
+	<link href="../node_modules/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+	<script src="../node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
 
-  	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-  	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-  	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- SweetAlert2对话框 -->
     <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../node_modules/sweetalert2/dist/sweetalert2.css">
@@ -46,7 +44,7 @@
       dept.departID = GetQueryString("agr");
      // alert(dept.departID);
     //alert(GetQueryString("agr"));
-
+ 
       </script>
 
   </head>
@@ -71,16 +69,47 @@
             tive"><a href="announcement.html">公告管理</a></li>
             <li><a href="task.html">任务管理</a></li>
           </ul>
+          <div class="pull-right">
+
+        <div class="dropdown">
+          <button type="button" class="btn dropdown-toggle" style="background: transparent;color:white;" id="dropdownMenu0" data-toggle="dropdown">
+          xx管理员
+              <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="#" onclick="">修改密码</a>
+                  <a role="menuitem" tabindex="-1" href="#" onclick="">退出登录</a>
+              </li>
+        
+          </ul>
+        </div>
+      </div>
+   
         </div><!--/.nav-collapse -->
+
       </div>
     </nav>
 
       
 
     <div class="container">
+		<div class="pull-right">
 
+	      <div class="dropdown">
+	        <button type="button" class="btn dropdown-toggle " id="dropdownMenu1" data-toggle="dropdown">部门领导管理
+	            <span class="caret"></span>
+	        </button>
+	        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+	            <li role="presentation" class="dropdown-header">部门领导信息管理</li>
+	            <li role="presentation">
+	                <a role="menuitem" tabindex="-1" href="#" onclick="altLeader(dept.departID)">修改部门领导</a>
+	            </li>
+	      
+	        </ul>
+	      </div>
+	    </div>
    
-
    <div class="jumbotron">
       <strong><h1 id ="deptName"></strong>
    
@@ -106,6 +135,8 @@
           var agr ="h1#deptName";//agr to append 
           var opts = "";  
 
+          dept.departName = data[0].departName;
+
           var Name = data[0].departName;
           opts += Name ;
           $(agr).append(opts);
@@ -124,7 +155,67 @@
          }//==sucess function       
       }); //====ajax  */
     </script>
+ <script>
+    //修改部门领导信息
+    altLeader = function (departID) {
 
+       swal({
+          title: '请输入新领导用户信息',
+          showCancelButton: true,
+          html:
+            '<small>工号</small>'+
+            '<input  onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,\'\')" id="swal-input1" class="swal2-input"></input>',
+          preConfirm: function () {
+            return new Promise(function (resolve,reject) {
+              if ( $('#swal-input1').val()=== '') {
+                reject('工号不能为空')
+             }else{
+                resolve([
+                  $('#swal-input1').val()
+                ])
+             }
+            })
+          },
+          onOpen: function () {
+            $('#swal-input1').focus()
+          }
+        }).then(function (result) {
+            var datas = new Object();
+
+            datas.userID = result[0];
+            datas.departName =dept.departName;
+
+            //alert(datas.userID);
+            $.ajax({
+               type: "POST",
+               url: 'http://115.159.38.100:3000/user/update/leader',
+               data: datas,
+               cache:false,
+               async : true,
+               dataType : "json",
+               success: function(data){
+                  if(data == "success"){    
+                    swal(          
+                      'Deleted!',
+                      '修改成功',
+                      'success'
+                    );
+                      window.location.reload(); 
+                  }else {
+                     swal(          
+                          'Error!',
+                          '修改失败，请重试。',
+                          'error'
+                      );              
+                  }
+               }
+            });//==ajax
+
+        }).catch(swal.noop)
+
+      }//====del
+
+    </script>
     <div class="row">
         <br /><br />
 
@@ -143,29 +234,6 @@
 
 <script type="text/javascript">
 
-     //   $.ajax({
-      //     type: "POST",
-       //    url: 'http://115.159.38.100:3000/user/search/departid',
-        //   data: datas,
-       //    cache:false,
-      //     async : true,
-       //    dataType : "json",
-     //      success: function(data){
-      //        var agr ="div#userList";//agr to append
-       //       var user_list = data;  
-       //       var opts = "";  
-
-    //          for( var i = 0 ; i < user_list.length; i++ ){  
-     //           //画本节点
-     //           var UName = user_list[i].userName;
-      //          var UID = user_list[i].userID;
-       //         opts += " <a href=\"#\" class=\"list-group-item\">" + "<h4>";
-       //         opts += UName + "<h4></a>";
-
-        //      }
-       //       $(agr).append(opts);
-        //   }//====sucess
-       // });//====ajax
     $(document).ready(function(){ 
       var datas = new Object();
       datas.userDepart = dept.departID  ;
@@ -209,6 +277,7 @@
           //clickToSelect: true,
           striped: true,                              //是否显示行间隔色
           showColumns: true, //是否显示所有的列
+
           minimumCountColumns: 1, //最少允许的列数
           //showToggle:true, //是否显示详细视图和列表视图的切换按钮
 
@@ -221,11 +290,17 @@
               field: 'userID',
               title: '工号',
               align: 'center',
-              width:100,
+              width:80,
               sortable: true
               }, {
               field: 'userName',
               title: '姓名',
+              align: 'center',
+              sortable: true,
+              width:130
+               }, {
+              field: 'userPhone',
+              title: '手机',
               align: 'center',
               sortable: true,
               width:200
@@ -233,10 +308,10 @@
               field: 'Item Operate',
               title: '相关操作',
               align: 'center',
-              width:80,
+              width:100,
               formatter:function(value,row,index){
-                         var e = ' <i class="glyphicon glyphicon-pencil" onclick="edit(\''+ row.time +'\',\''+ row.departName + '\')"></i> ';
-                         var d = ' <i class="glyphicon glyphicon-trash" onclick="del(\''+ row.time + '\' )"></i> ';
+                         var e = ' <i class="glyphicon glyphicon-pencil" onclick="edit(\''+ row.userID + '\')"></i> ';
+                         var d = ' <i class="glyphicon glyphicon-trash" onclick="del(\''+ row.userID + '\' )"></i> ';
                           return e+d;
               }
             }
@@ -248,7 +323,7 @@
 /********** bootstrapTable 操作列 *********/  
 
 
-     del = function (time) {
+     del = function (ID) {
       swal({
         title: "确定删除用户吗?",
         text: "此操作将无法恢复！",
@@ -263,12 +338,12 @@
         buttonsStyling: false
         }).then(function () {
           var datas = new Object();
-            datas.time = time;
+            datas.userID = ID;
             //alert(datas.time);
 
-            /*$.ajax({
+            $.ajax({
                type: "POST",
-               url: 'http://115.159.38.100:3000/bulletin/delete',
+               url: 'http://115.159.38.100:3000/user/delete',
                data: datas,
                cache:false,
                async : true,
@@ -276,22 +351,22 @@
                success: function(data){
                   if(data == "success"){    
 
-                    //alert("删除成功！");
-                    table.bootstrapTable('refresh');
+                    swal(          
+                      'Deleted!',
+                      '用户已经删除',
+                      'success'
+                    );
+
+                      window.location.reload(); 
 
                     } else {
 
-                    alert("删除失败");     
+                    alert("删除失败,请重试！");     
                    // table.bootstrapTable('refresh');                
                     }
                }
-            }); */
+            }); 
 
-          swal(          
-            'Deleted!',
-            '用户已经删除',
-            'success'
-          );
         }, function (dismiss) {
           // dismiss can be 'cancel', 'overlay',
           // 'close', and 'timer'
@@ -299,22 +374,29 @@
           }
         })
 
-
     }//====del
  
-   edit = function (time,departName) {
+   edit = function (ID) {
         swal({
           title: '修改',
           showCancelButton: true,
           html:
-            '<small>请输入新的姓名</small>'+
-            '<input id="swal-input1" class="swal2-input"></input>' ,
+            '<small>姓名</small>'+
+            '<input id="swal-input1" class="swal2-input" placeholder="请输入新姓名" ></input>'+
+            '<small>手机</small>'+
+            '<input  onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,\'\')" id="swal-input2" class="swal2-input"  placeholder="请输入新手机" ></input>' ,
           preConfirm: function () {
-            return new Promise(function (resolve) {
-              resolve([
-                $('#swal-input1').val(),
-                $('#swal-input2').val()
-              ])
+            return new Promise(function (resolve,reject) {
+              if ( $('#swal-input1').val()=== '') {
+                reject('姓名不能为空')
+             }else if ( $('#swal-input2').val()=== '') {
+                reject('手机不能为空')
+             }else{
+                resolve([
+                  $('#swal-input1').val(),
+                  $('#swal-input2').val()
+                ])
+             }
             })
           },
           onOpen: function () {
@@ -322,6 +404,12 @@
           }
         }).then(function (result) {
           //swal(JSON.stringify(result))
+          var user = new Object(); //创建用户对象
+          user.userName = result[0];
+          user.userPhone = result[1];
+          user.userID = ID;
+
+          var datas = user;
           swal({
             title: "确定修改吗?",
             text: "此操作将无法恢复！",
@@ -335,39 +423,33 @@
             cancelButtonClass: 'btn btn-danger',
             buttonsStyling: false
             }).then(function () {
-                //var datas = announcementSubmit(result[0],result[1],departName);
-
-                //alert(datas.name);
-                //alert(datas,content);
-                //alert(datas,departName);
-                //alert(datas.time);
-
-              /*  $.ajax({
+                
+               $.ajax({
                    type: "POST",
-                   url: 'http://115.159.38.100:3000/bulletin/delete',
+                   url: 'http://115.159.38.100:3000/user/update',
                    data: datas,
                    cache:false,
                    async : true,
                    dataType : "json",
                    success: function(data){
                       if(data == "success"){    
-
-                        //alert("删除成功！");
-                        table.bootstrapTable('refresh');
+                        swal(          
+                          'Success!',
+                          '修改成功',
+                          'success'
+                        );
+                        window.location.reload(); 
 
                         } else {
 
-                        alert("删除失败");     
-                       // table.bootstrapTable('refresh');                
+                          swal(          
+                            'Error!',
+                            '修改失败，请重试。',
+                            'error'
+                          );              
                         }
                    }
-                }); */
-
-              swal(          
-                'Success!',
-                '公告已经修改',
-                'success'
-              );
+                }); 
 
         }, function (dismiss) {
           // dismiss can be 'cancel', 'overlay',
@@ -386,34 +468,100 @@
         swal({
           title: '添加用户',
           showCancelButton: true,
+          inputAutoTrim:true,
           html:
-            '<small>请输入用户工号</small>'+
-            '<input id="swal-input1" class="swal2-input"></input>' +
-            '<small>请输入用户姓名</small>'+
-            '<input id="swal-input2" class="swal2-input"></input>',
+            '<small>姓名</small>'+
+            '<input id="swal-input1" class="swal2-input" placeholder="请输入用户姓名" ></input>' +
+            '<small>手机</small>'+
+            '<input onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,\'\')" id="swal-input2" class="swal2-input" placeholder="请输入用户手机" ></input>',
           preConfirm: function () {
-            return new Promise(function (resolve) {
-              resolve([
-                $('#swal-input1').val(),
-                $('#swal-input2').val()
-              ])
+            return new Promise(function (resolve,reject) {
+              if ( $('#swal-input1').val()=== '') {
+                reject('姓名不能为空')
+             }else if ( $('#swal-input2').val()=== '') {
+                reject('手机不能为空')
+             }else{
+                resolve([
+                  $('#swal-input1').val(),
+                  $('#swal-input2').val()
+                ])
+             }
             })
           },
           onOpen: function () {
             $('#swal-input1').focus()
           }
         }).then(function (result) {
-          //swal(JSON.stringify(result))
-          
+            //swal(JSON.stringify(result))
+            var user = new Object(); //创建用户对象
+            user.userName = result[0];
+            user.userPhone = result[1];
+            
+            var datas = user;
 
-              swal(          
-                'Success!',
-                '用户已经添加',
-                'success'
-              );
+             $.ajax({
+               type: "POST",
+               url: 'http://115.159.38.100:3000/user',
+               data: datas,
+               cache:false,
+               async : true,
+               dataType : "json",
+               success: function(data){
+                  if(data == "success"){    
+                      datas.departName = dept.departName;
+
+                      $.ajax({
+                         type: "POST",
+                         url: 'http://115.159.38.100:3000/user/add/staff',
+                         data: datas,
+                         cache:false,
+                         async : true,
+                         dataType : "json",
+                         success: function(data){
+                            if(data == "success"){    
+                              /*swal(          
+                              'Success!',
+                              '用户添加成功。',
+                              'success'
+                              );*/
+                            window.location.reload(); 
+                            }else {
+                               swal(          
+                              'Error!',
+                              '添加失败，请重试。',
+                              'error'
+                               );             
+                            }
+       
+                         }
+                      }); //======ajax
+
+
+                    } else if(data == "exist") {
+
+                     swal(          
+                    'Error!',
+                    '已存在该用户。',
+                    'error'
+                    );
+
+                    window.location.reload(); 
+
+                    } else{
+
+                     swal(          
+                    'Error!',
+                    '添加失败，请重试。',
+                    'error'
+                    );
+
+                   // table.bootstrapTable('refresh');                
+                    }
+               }
+            }); //======ajax
 
         }).catch(swal.noop)
-      
+
       }//==addUser
 
   }); //====ready

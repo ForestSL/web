@@ -11,19 +11,17 @@
 
     <title>首页</title>
 
-    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-
+     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
      <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-  	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-  	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" >
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.min.css" >
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js" ></script>
+    <!-- SweetAlert2对话框 -->
+    <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/sweetalert2/dist/sweetalert2.css">
 
 
     <!-- Custom styles for this template -->
@@ -62,6 +60,8 @@
       <ul>
         <li>
          <span><i class="glyphicon glyphicon-minus-sign"></i> xx企业</span> 
+          <i class="glyphicon glyphicon-pencil" onclick="edit()"></i>
+          <i class="glyphicon glyphicon-plus" onclick="add()"></i>   
          <ul id ="root">
          
          </ul>
@@ -87,8 +87,12 @@
             //画本节点
             var dName = dept_list[dept_index].departName;
             var dID = dept_list[dept_index].departID;
+            if(dName == null)continue;
             opts += "<li>" + "<span><i class=\"glyphicon glyphicon-leaf\"></i>" + dName + "</span> ";
-            opts += "<a href=\"departmentPage.html?agr=" + dID + "\">详情</a>"; 
+            opts += "<i class=\"glyphicon glyphicon-pencil\" onclick=\"edit(\'"+ dID + "\')\"></i>";
+            opts += "<i class=\"glyphicon glyphicon-plus\" onclick=\"add(\'"+ dName + "\')\"></i> ";  
+            opts += "<i class=\"glyphicon glyphicon-trash\" onclick=\"del(\'"+ dName + "\')\"></i> ";
+            opts += "<a href=\"departmentPage.html?agr=" + dID + "\">详情</a>";
            // opts += "<a href=\"departmentPage.html?agr=aaaaa\">详情</a>";  
             opts += "<ul id =\"" + dID  +"\">" +"</ul></li>"; 
             $(agr).append(opts);
@@ -104,7 +108,233 @@
          }//==sucess function       
       }); //====ajax  */
 
+/********** bootstrapTable 操作列 *********/  
 
+$(document).ready(function(){ 
+
+     del = function (deptName) {
+
+      swal({
+        title: "确定删除该部门吗?",
+        text: "此操作将无法恢复！",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false
+        }).then(function () {
+            var datas = new Object();
+            datas.departName = deptName;
+            //salert(datas.departName);
+
+            $.ajax({
+               type: "POST",
+               url: 'http://115.159.38.100:3000/depart/delete',
+               data: datas,
+               cache:false,
+               async : true,
+               dataType : "json",
+               success: function(data){
+                  if(data == "success"){    
+
+                    swal(          
+                      'Deleted!',
+                      '部门已经删除',
+                      'success'
+                    );
+
+                      window.location.reload(); 
+
+                    } else if(data == "exist user"){
+                      swal(          
+                      'Error!',
+                      '删除失败，请先对部门用户进行处理。',
+                      'error'
+                      );
+
+                    }else if(data == "exist children"){
+                       swal(          
+                      'Error!',
+                      '删除失败，请先子部门进行处理。',
+                      'error'
+                      );
+                    }
+                    else{
+                    alert(data);
+                    alert("删除失败,请重试！");               
+                    }
+               }
+            }); 
+        }, function (dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+          }
+        })
+
+
+    }//====del
+ 
+   edit = function (ID) {
+        swal({
+          title: '修改部门名',
+          showCancelButton: true,
+          html:
+            '<small>部门名</small>'+
+            '<input id="swal-input1" class="swal2-input" placeholder="请输入新部门名" ></input>' ,
+          preConfirm: function () {
+             return new Promise(function (resolve,reject) {
+              if ( $('#swal-input1').val()=== '') {
+                reject('部门名不能为空')
+             }else{
+                resolve([
+                  $('#swal-input1').val()
+                ])
+             }
+            })
+          },
+          onOpen: function () {
+            $('#swal-input1').focus()
+          }
+        }).then(function (result) {
+          //swal(JSON.stringify(result))
+          var datas = new Object(); //创建用户对象
+          datas.departID = ID;
+          datas.departName = result[0];
+          
+
+          swal({
+            title: "确定修改吗?",
+            text: "此操作将无法恢复！",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+            }).then(function () {
+
+               $.ajax({
+                   type: "POST",
+                   url: 'http://115.159.38.100:3000/depart/update/name',
+                   data: datas,
+                   cache:false,
+                   async : true,
+                   dataType : "json",
+                   success: function(data){
+                      if(data == "success"){    
+                        swal(          
+                          'Success!',
+                          '修改成功',
+                          'success'
+                        );
+                        alert("sfa");
+                        window.location.reload(); 
+
+                        } else {
+
+                          swal(          
+                            'Error!',
+                            '修改失败，请重试。',
+                            'error'
+                          );              
+                        }
+                   }
+                }); 
+
+        }, function (dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+          }
+        })
+
+        }).catch(swal.noop)
+      
+    }//====edit
+
+  add = function (parentName) {  
+      // alert(parentName);
+        swal({
+          title: '添加子部门',
+          showCancelButton: true,
+          html:
+            '<small>子部门名字</small>'+
+            '<input id="swal-input1" class="swal2-input" placeholder="请输入子部门名字"></input>',
+          preConfirm: function () {
+            return new Promise(function (resolve,reject) {
+              if ( $('#swal-input1').val()=== '') {
+                reject('部门名不能为空')
+             }else{
+                resolve([
+                  $('#swal-input1').val()
+                ])
+             }
+            })
+          },
+          onOpen: function () {
+            $('#swal-input1').focus()
+          }
+        }).then(function (result) {
+          //swal(JSON.stringify(result))
+           var datas = new Object(); //创建用户对象
+            datas.parentName = parentName;
+            datas.departName = result[0];
+            //alert(datas.departName);
+
+             $.ajax({
+               type: "POST",
+               url: 'http://115.159.38.100:3000/depart',
+               data: datas,
+               cache:false,
+               async : true,
+               dataType : "json",
+               success: function(data){
+                  if(data == "success"){    
+  
+                    /*swal(          
+                    'Success!',
+                    '子部门添加成功。',
+                    'success'
+                    );*/
+
+                     window.location.reload(); 
+
+                    } else if(data == "exist") {
+
+                     swal(          
+                    'Error!',
+                    '已存在该部门。',
+                    'error'
+                    );
+
+                    //window.location.reload(); 
+
+                    } else{
+
+                     swal(          
+                    'Error!',
+                    '添加失败，请重试。',
+                    'error'
+                    );
+
+                   // table.bootstrapTable('refresh');                
+                    }
+               }
+            }); //======ajax
+
+        }).catch(swal.noop)
+      
+    }//==add
+
+  }); //====ready
     </script> 
 
     

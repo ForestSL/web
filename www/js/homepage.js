@@ -28,7 +28,7 @@ function createChildrenNode(pName,pID)
         dataType : "json",  
         data: req,  
 
-        success : function(data) {  
+        success : function(data) {   
         //alert("2222);
         if (data != "null"){
           var agr = "ul#"+pID;//agr to append
@@ -39,15 +39,21 @@ function createChildrenNode(pName,pID)
             //画本节点
             var dName = dept_list[dept_index].departName;
             var dID = dept_list[dept_index].departID;
+            if(dName == null)continue;
             opts += "<li>" + "<span><i class=\"glyphicon glyphicon-leaf\"></i>" + dName + "</span> ";
-            //opts += "<a href=\"departmentPage.html\">详情</a>";  
-            opts += "<a href=\"departmentPage.html?agr=" + dID + "\">详情</a>"; 
-            opts +="<ul id =\"" + dID  +"\">" +"</ul></li>"; 
+            opts += "<i class=\"glyphicon glyphicon-pencil\" onclick=\"edit(\'"+ dID + "\')\"></i>";
+            opts += "<i class=\"glyphicon glyphicon-plus\" onclick=\"add(\'"+ dName + "\')\"></i> ";  
+            opts += "<i class=\"glyphicon glyphicon-trash\" onclick=\"del(\'"+ dName + "\')\"></i> ";
+            opts += "<a href=\"departmentPage.html?agr=" + dID + "\">详情</a>";
+           // opts += "<a href=\"departmentPage.html?agr=aaaaa\">详情</a>";  
+            opts += "<ul id =\"" + dID  +"\">" +"</ul></li>"; 
+
+
             $(agr).append(opts);
             opts = "";
             //画该节点的子节点
-            
-            //createChildrenNode(dName,dId);
+  
+            createChildrenNode(dName,dID);
 
           }//===for
         }

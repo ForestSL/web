@@ -32,6 +32,12 @@
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+     <!-- SweetAlert2对话框 -->
+    <script src="../../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../node_modules/sweetalert2/dist/sweetalert2.css">
+    <!-- for IE support -->
+    <script src="../../node_modules/es6-promise/dist/es6-promise.min.js"></script>
+
 
     <!-- Custom styles for this template -->
     <link href="../css/task.css" rel="stylesheet">
@@ -69,7 +75,7 @@
     <h2>XX公司任务流程</h2>  
 
         <div class="col-xs-9">
-          <h2>XX公司流程列表</h2>
+          <h2>XX公司当前请假情况</h2>
           <table id="table" class="table table-hover" data-classes="table table-hover"  
          data-striped="true"  >  
               
@@ -89,12 +95,13 @@
            
             $.ajax({
                  type: "GET",
-                 //url: 'http://localhost:3000/task/process/all',
-                 url: 'http://115.159.38.100:3000/task/process/all',
+                 //url: 'http://localhost:3000/task/processinstance/all',
+                 url: 'http://115.159.38.100:3000/task',
                  cache:false,
                  async : false,
                  dataType : "json",
                 success: function (datas, textStatus){ 
+                  //alert(datas);
                   process_list=datas;
                 }//==sucess function       
               }); //====ajax
@@ -133,86 +140,41 @@
 
 
                 columns: [
-                {
-                  field: 'number',
-                  title: 'number',
-                  visible:false,
-                  formatter: function (value, row, index) {
-                     return index+1;
-                  }
-                  },{
-                  field: 'id',
-                  title: '流程ID',
+               {
+                  field: 'userID',
+                  title: '用户ID',
                   align: 'center',
                   width:120,
                   sortable: true
                   }, {
-                  field: 'name',
-                  title: '流程名称',
+                  field: 'userName',
+                  title: '用户姓名',
                   align: 'center',
                   sortable: true,
                   width:200
                   }, {
-                  field: 'description',
-                  title: '流程描述',
+                  field: 'processID',
+                  title: '流程实例ID',
                   align: 'center',
                   sortable: true,
                   width:200
                   }, {
-                  field: 'deploymentId',
-                  title: '部署ID',
+                  field: 'state',
+                  title: '当前状态',
                   align: 'center',
                   sortable: true,
                   width:200
-                  //}, {
-                  //field: 'resource',
-                  //title: '流程图',
-                  //align: 'center',
-                  //sortable: true,
-                  //width:200
                   }, {
-                  field: 'suspended',
-                  title: '是否挂起',
+                  field: 'result',
+                  title: '处理结果',
                   align: 'center',
                   sortable: true,
                   width:200
-                  },{
-                  field: 'Item Operate',
-                  title: '相关操作',
-                  align: 'center',
-                  formatter:function(value,row,index){
-                    var d = ' <i class="glyphicon glyphicon-pencil" onclick="del(\''+ row.id +'\')"></i> ';
-                    return d;
                   }
-                }],
+                ],
 
                 data: process_list
             });//=====bootstrapTable 
-
-    del = function (id) {
-
-      var datas = new Object();
-      datas.processDefinitionId = id;
-      //alert(datas.processDefinitionId);
-
-      $.ajax({
-          type: "POST",
-          //url: 'http://localhost:3000/task/processinstance/start',
-          url: 'http://115.159.38.100:3000/task/processinstance/start',
-          data: datas,
-          cache:false,
-          async : true,
-          dataType : "json",
-          success: function(data){
-            if(data == 'success'){    
-                alert("success");
-            } else {
-                alert("fail");     
-                // table.bootstrapTable('refresh');                
-            }
-          }
-      }); 
-    }//====del
 
   }); //====ready
   </script>
